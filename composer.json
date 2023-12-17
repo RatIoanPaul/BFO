@@ -1,0 +1,20 @@
+{
+    "name": "grati/bfo",
+    "description": "Website for managing an NGO.",
+    "type": "library",
+    "require-dev": {
+        "phpmailer/phpmailer": "*"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Grati\\Bfo\\": "src/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "phpoffice/phpword": "^1.1",
+        "league/oauth2-client": "^2.7",
+        "psr/log": "^3.0"
+    }
+}
