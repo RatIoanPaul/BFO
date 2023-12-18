@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+   <meta charset="UTF-8">
+   <title>Certificat de Voluntariat</title>
+   <style>
+    .cert-template-container {
+    border: 2px solid #000;
+    padding: 40px;
+    text-align: center;
+    background: #fafafa;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.cert-template-container h1 {
+    font-size: 28px;
+    margin-bottom: 40px;
+}
+
+.cert-template-container p {
+    font-size: 18px;
+    margin: 20px 0;
+}
+
+.cert-template-container .signature {
+    margin-top: 40px;
+    text-align: right;
+    font-style: italic;
+}
+
+.cert-template-container .logo {
+    width: 100px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+    </style>
+</head>
+
+<body>
+<!-- Începutul conținutului din template.html -->
+<div class="cert-template-container">
+    <img src="imagini/logo_organizatie.png" alt="Logo Organizație" class="logo">
+    <h1>Certificat de Voluntariat</h1>
+    <p>Acest certificat este acordat subsemnatului/subsemnatei </p>
+    <p><strong>{{ NumePrenume }} </strong> C.N.P <strong>{{ Cnp }}</strong> </p> 
+    <p>nascut/a <strong>{{ DataNastere }} </strong> ce a participat in perioada 02.01.2023 - 31.12.2023 </p>
+    <p>la activiatile de voluntariat in cadrul BFO, pentru contributia valoroasa si dedicarea oferita in calitate de voluntar/a. </p>
+    <p class="signature">Semnat,</p>
+    <p class="signature">Rat Ioan-Paul</p>
+    <p class="signature">Data: {{ Data }}</p>
+</div>
+<!-- Sfârșitul conținutului din template.html -->
+
+</body>

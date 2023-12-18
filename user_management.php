@@ -9,13 +9,6 @@ if (session_status() == PHP_SESSION_NONE) {
 //Se încearcă încărcarea fișierului autoload.php din directorul vendor.
 require 'C:\xampp\htdocs\BFO\vendor\autoload.php'; // Încarcă toate bibliotecile Composer
 
-// Verifică dacă utilizatorul este autentificat ca admin; 
-// Dacă nu, îl redirecționează la formularul de login;
-if (!isset($_SESSION['email'])) {
-    header('location:login_form.php');
-    exit();
-}
-
 // Detalii pentru conectarea la baza de date
 $host = "localhost";
 $user = "root";
@@ -45,48 +38,7 @@ $conn->close();
 </head>
 
 <body>
-    <!-- =============== Navigation ================ -->
-    <div class="container">
-        <div class="navigation">
-            <ul>
-                <li>
-                    <a href="admin_page.php">
-                        <span class="icon">
-                            <ion-icon name="home-outline"></ion-icon>
-                        </span>
-                        <span class="title">BFO</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="volunteer_management.php">
-                        <span class="icon">
-                            <ion-icon name="people-outline"></ion-icon>
-                        </span>
-                        <span class="title">GESTIONARE VOLUNTARI</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="announcement_management.php">
-                        <span class="icon">
-                            <ion-icon name="chatbubble-outline"></ion-icon>
-                        </span>
-                        <span class="title">GESTIONARE ANUNȚURI</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="certificate_management.php">
-                        <span class="icon">
-                            <ion-icon name="ribbon-outline"></ion-icon>
-                        </span>
-                        <span class="title">GESTIONARE CERTIFICATE</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <?php include 'user_page.php'; ?>
 
     <!-- =========== Scripts =========  -->
     <script src="assets/js/main.js"></script>

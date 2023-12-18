@@ -1,82 +1,130 @@
 <?php
-// edit_volunteer.php
+session_start();
 
-// Detalii pentru conectarea la baza de date
+@include 'config.php';
+
+require 'C:\xampp\htdocs\BFO\vendor\autoload.php'; // Încarcă toate bibliotecile Composer
+
+// Inițializează variabila pentru mesajele de eroare;
+$errorMessage = '';
+
+// Setează detaliile pentru conectarea la baza de date MySQL;
 $host = "localhost";
 $user = "root";
 $password = "";
 $dbname = "bfo";
 
-// Crearea conexiunii MySQLi
+// Inițializează o nouă conexiune MySQLi cu baza de date;
 $conn = new mysqli($host, $user, $password, $dbname);
 
-// Verificați dacă Id-ul a fost transmis
-if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-    $volunteer_id = $_GET['id'];
-
-    // Pregătiți interogarea pentru a obține detaliile voluntarului
-    $stmt = $conn->prepare("SELECT * FROM volunteer WHERE Id = ?");
-    $stmt->bind_param("i", $volunteer_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows == 1) {
-        $row = $result->fetch_assoc();
-        // Formularul de editare
-        echo "<div id='GestionareVoluntarii' class='tabcontent'>
-                 <h2>
-                    <p align='center'>GESTIONARE BAZA DE DATE VOLUNTARII</p>
-                 </h2>
-                 <h3>Editează voluntar:</h3>
-                 <form action='update_volunteer.php' method='post'>
-                    <input type='hidden' name='Id' value='" . $row['Id'] . "'>
-                    <div class='form-field'>
-                       <input type='text' id='NumePrenume' name='NumePrenume' placeholder='Nume și prenume:' value='" . $row['NumePrenume'] . "' required>
-                    </div>
-                    <div class='form-field'>
-                       <input type='text' id='Domiciliu' name='Domiciliu' placeholder='Domiciliu:' value='" . $row['Domiciliu'] . "' required>
-                    </div>
-                    <div class='form-field'>
-                       <input type='text' id='Cnp' name='Cnp' placeholder='CNP:' value='" . $row['Cnp'] . "' required>
-                    </div>
-                    <div class='form-field'>
-                       <input type='text' id='SeriaCI' name='SeriaCI' placeholder='Seria CI:' value='" . $row['SeriaCI'] . "' required>
-                    </div>
-                    <div class='form-field'>
-                       <input type='text' id='NumarCI' name='NumarCI' placeholder='Număr CI:' value='" . $row['NumarCI'] . "' required>
-                    </div>
-                    <div class='form-field'>
-                       <input type='text' id='EliberatCI' name='EliberatCI' placeholder='CI emis de:' value='" . $row['EliberatCI'] . "' required>
-                    </div>
-                    <div class='form-field'>
-                       <label for='EmitereCI'>CI valabil de la:</label>
-                       <input type='date' id='EmitereCI' name='EmitereCI' value='" . $row['EmitereCI'] . "' required>
-                    </div>
-                    <div class='form-field'>
-                       <label for='ExpirareCI'>CI valabil până la:</label>
-                       <input type='date' id='ExpirareCI' name='ExpirareCI' value='" . $row['ExpirareCI'] . "' required>
-                    </div>
-                    <div class='form-field'>
-                       <label for='DataNastere'>Data nașterii:</label>
-                       <input type='date' id='DataNastere' name='DataNastere' value='" . $row['DataNastere'] . "' required>
-                    </div>
-                    <div class='form-field'>
-                       <input type='text' id='Telefon' name='Telefon' placeholder='Telefon:' value='" . $row['Telefon'] . "' required>
-                    </div>
-                    <div class='form-field'>
-                       <input type='email' id='Email' name='Email' placeholder='Email:' value='" . (isset($row['Email']) ? $row['Email'] : '') . "' required>
-                    </div>
-                    <div class='form-field'>
-                       <button type='submit' name='update_volunteer' class='button'>Actualizează Voluntar</button>
-                    </div>
-                 </form>
-              </div>";
-    } else {
-        echo "Voluntarul nu a fost găsit.";
-    }
-
-    $stmt->close();
-    $conn->close();
-} else {
-    echo "ID invalid.";
+// Verifică dacă conexiunea la baza de date a reușit sau nu;
+if ($conn->connect_error) {
+   die("Conexiune eșuată: " . $conn->connect_error);
 }
+
+// Verificați dacă Id-ul a fost transmis
+if (isset($_GET['NumarContract']) && is_numeric($_GET['NumarContract'])) {
+   $volunteer_id = $_GET['NumarContract'];
+
+   // Pregătiți interogarea pentru a obține detaliile voluntarului
+   $stmt = $conn->prepare("SELECT * FROM volunteer WHERE NumarContract = ?");
+   $stmt->bind_param("i", $volunteer_id);
+   $stmt->execute();
+   $result = $stmt->get_result();
+
+   if ($result->num_rows == 1) {
+      $row = $result->fetch_assoc();
+?>
+      <!DOCTYPE html>
+      <html lang="en">
+
+      <head>
+         <meta charset="UTF-8">
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <title>Uplode</title>
+         <link rel="stylesheet" href="css/style.css">
+      </head>
+
+      <body>
+         <div class="recentCustomers">
+            <div class="cardHeader">
+               <h2 align='center'>
+                  Editează voluntar:
+               </h2>
+            </div>
+            <div class="cardHeader">
+               <div class="container">
+                  <form action='update_volunteer.php' method='post'>
+                     <input type='hidden' name='NumarContract' value='<?php echo $row['NumarContract']; ?>'>
+                     <div class='form-field'>
+                        <label for='NumePrenume'>Nume și prenume:</label>
+                        <input type='text' id='NumePrenume' name='NumePrenume' value='<?php echo $row['NumePrenume']; ?>' required>
+                     </div>
+                     <div class='form-field'>
+                        <label for='Domiciliu'>Domiciliu:</label>
+                        <input type='text' id='Domiciliu' name='Domiciliu' value='<?php echo $row['Domiciliu']; ?>' required>
+                     </div>
+                     <div class='form-field'>
+                        <label for='Cnp'>Cnp:</label>
+                        <input type='text' id='Cnp' name='Cnp' value='<?php echo $row['Cnp']; ?>' required>
+                     </div>
+                     <div class='form-field'>
+                        <label for='SeriCI'>SeriaCI:</label>
+                        <input type='text' id='SeriaCI' name='SeriaCI' value='<?php echo $row['SeriaCI']; ?>' required>
+                     </div>
+                     <div class='form-field'>
+                        <label for='NumarCI'>NumarCI:</label>
+                        <input type='text' id='NumarCI' name='NumarCI' value='<?php echo $row['NumarCI']; ?>' required>
+                     </div>
+                     <div class='form-field'>
+                        <label for='EliberatCI'>EliberatCI:</label>
+                        <input type='text' id='EliberatCI' name='EliberatCI' value='<?php echo $row['EliberatCI']; ?>' required>
+                     </div>
+                     <div class='form-field'>
+                        <label for="EmitereCI">CI valabil de la:</label>
+                        <input type='date' id='EmitereCI' name='EmitereCI' value='<?php echo $row['EmitereCI']; ?>' required>
+                     </div>
+                     <div class='form-field'>
+                        <label for="ExpirareCI">CI valabil până la:</label>
+                        <input type='date' id='ExpirareCI' name='ExpirareCI' value='<?php echo $row['ExpirareCI']; ?>' required>
+                     </div>
+                     <div class='form-field'>
+                        <label for="DataNastere">Data nașterii:</label>
+                        <input type='date' id='DataNastere' name='DataNastere' value='<?php echo $row['DataNastere']; ?>' required>
+                     </div>
+                     <div class='form-field'>
+                        <label for='Telefon'>Telefon:</label>
+                        <input type='text' id='Telefon' name='Telefon' value='<?php echo isset($row['Telefon']) ? $row['Telefon'] : ''; ?>' required>
+                     </div>
+                     <div class='form-field'>
+                        <label for='Email'>Email:</label>
+                        <input type='text' id='Email' name='Email' value='<?php echo isset($row['Email']) ? $row['Email'] : ''; ?>' required>
+                     </div>
+                     <div class='form-field'>
+                        <button type='submit' name='update_volunteer' class='button'>Actualizează Voluntar</button>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+         <!-- Aici se termină formularul de editare -->
+      </body>
+<?php
+   } else {
+      $_SESSION['response'] = "Voluntarul nu a fost găsit.";
+      $_SESSION['res_type'] = "error";
+      header("Location: volunteer_management.php");
+      exit;
+   }
+
+   $stmt->close();
+} else {
+   $_SESSION['response'] = "ID invalid.";
+   $_SESSION['res_type'] = "error";
+   header("Location: volunteer_management.php");
+   exit;
+}
+
+// Închide conexiunea cu baza de date;
+$conn->close();
+?>

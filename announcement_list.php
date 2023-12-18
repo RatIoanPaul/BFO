@@ -20,7 +20,7 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     // Începerea tabelului
     echo "<div class='table-container'>
-    <table class='table-announcements'><tr><th>Postat la</th><th>Anunț</th><th>Acțiuni</th></tr>";
+    <table class='table-announcements'><tr><th>Postat la</th><th>Anunț</th><th>Editează</th><th>Șterge</th></tr>";
     // Output data of each row
     while ($row = $result->fetch_assoc()) {
         // Formatarea datei și orei
@@ -29,8 +29,10 @@ if ($result->num_rows > 0) {
                 <td>" . $dataFormatata . "</td>
                 <td>" . $row["announcement_text"] . "</td>
                 <td class='actiuni'>
-                <a href='edit_volunteer.php?id=" . $row["id"] . "' class='btn-edit'>Editează</a>
-                <a href='delete_volunteer.php?id=" . $row["id"] . "' class='btn-delete'>Șterge</a>
+                <a href='edit_announcement.php?id=" . $row["id"] . "' class='btn-edit'>Editează</a>
+                </td>
+                <td class='actiuni'>
+                <a href='delete_announcement.php?id=" . $row["id"] . "' class='btn-delete'>Șterge</a>
                 </td>
               </tr>";
     }

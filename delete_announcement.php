@@ -37,6 +37,6 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $conn->close();
 
     // Redirecționăm către pagina de unde s-a făcut cererea
-    header("Location: admin_page.php"); // Înlocuiți cu pagina dvs. cu anunțuri
+    header("Location: announcement_management.php"); // Înlocuiți cu pagina dvs. cu anunțuri
     exit;
 }

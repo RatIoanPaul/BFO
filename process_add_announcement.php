@@ -16,9 +16,14 @@ if (isset($_POST['post_announcement'])) {
     $authorName = 'Raț Ioan-Paul';
     $stmt->bind_param("sss", $authorName, $currentDateTime, $announcementText);
 
+    // Executați interogarea și verificați succesul
+    if ($stmt->execute()) {
+        header('Location: announcement_management.php'); // Redirecționare după succes
+    } else {
+        echo "Eroare la inserarea anunțului: " . $stmt->error;
+    }
 
-    header('Location: announcement_management.php'); // Înlocuiește cu numele fișierului formularului
-
+    // Închideți statement-ul și conexiunea
     $stmt->close();
     $conn->close();
 }

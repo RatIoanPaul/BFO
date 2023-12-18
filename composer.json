@@ -15,6 +15,7 @@
     "require": {
         "phpoffice/phpword": "^1.1",
         "league/oauth2-client": "^2.7",
-        "psr/log": "^3.0"
+        "psr/log": "^3.0",
+        "dompdf/dompdf": "^2.0"
     }
 }

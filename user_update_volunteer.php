@@ -16,7 +16,7 @@ if ($conn->connect_error) {
     die("Conexiune eșuată: " . $conn->connect_error);
 }
 
-if (isset($_POST['update_volunteer'])) {
+if (isset($_POST['user_update_volunteer'])) {
     $NumarContract = $conn->real_escape_string($_POST['NumarContract']);
     // Colectează și pregătește datele din formular pentru inserarea în baza de date;
     // Validează datele primite pentru a preveni atacurile de tip SQL Injection;
@@ -77,6 +77,6 @@ if (isset($_POST['update_volunteer'])) {
     }
 
     $conn->close();
-    header("Location: volunteer_management.php");
+    header("Location: user_profile.php");
     exit;
 }

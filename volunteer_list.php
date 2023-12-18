@@ -91,7 +91,7 @@ $result = $conn->query($sql);
                     echo "<td class='email'>" . $row["Email"] . "</td>";
                     echo "<td class='actiuni'>";
                     echo "<a href='edit_volunteer.php?NumarContract=" . $row["NumarContract"] . "' class='btn-edit'>Editează</a>";
-                    echo "<a href='process_delete_volunteer.php?NumarContract=" . $row["NumarContract"], $row["Email"] . "' class='btn-delete'>Șterge</a>";
+                    echo "<a href='process_delete_volunteer.php?NumarContract=" . $row["NumarContract"] . "&Email=" . $row["Email"] . "' class='btn-delete'>Șterge</a>";
                     echo "</td>";
                     echo "</tr>";
                 }

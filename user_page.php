@@ -5,16 +5,8 @@ if (session_status() == PHP_SESSION_NONE) {
    session_start();
 }
 
-
 //Se încearcă încărcarea fișierului autoload.php din directorul vendor.
 require 'C:\xampp\htdocs\BFO\vendor\autoload.php'; // Încarcă toate bibliotecile Composer
-
-// Verifică dacă utilizatorul este autentificat ca admin; 
-// Dacă nu, îl redirecționează la formularul de login;
-if (!isset($_SESSION['email'])) {
-   header('location:login_form.php');
-   exit();
-}
 
 // Detalii pentru conectarea la baza de date
 $host = "localhost";
@@ -29,6 +21,7 @@ $conn = new mysqli($host, $user, $password, $dbname);
 if ($conn->connect_error) {
    die("Conexiune eșuată: " . $conn->connect_error);
 }
+
 $conn->close();
 ?>
 
@@ -37,10 +30,11 @@ $conn->close();
 
 <head>
    <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>CodingDung | Profile Template</title>
-   <link rel="stylesheet" href="css/style.css">
-   <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
+   <title>User</title>
+   <!-- ======= Styles ====== -->
+   <link rel="stylesheet" href="css/user_style.css">
 </head>
 
 <body>
@@ -58,7 +52,7 @@ $conn->close();
             </li>
 
             <li>
-               <a href="user_management.php">
+               <a href="user_profile.php">
                   <span class="icon">
                      <ion-icon name="people-outline"></ion-icon>
                   </span>
@@ -67,11 +61,20 @@ $conn->close();
             </li>
 
             <li>
-               <a href="announcement_management.php">
+               <a href="user_announcement_list.php">
                   <span class="icon">
                      <ion-icon name="chatbubble-outline"></ion-icon>
                   </span>
-                  <span class="title">VIZUALIZARE ANUNȚURI</span>
+                  <span class="title">ANUNȚURI</span>
+               </a>
+            </li>
+
+            <li>
+               <a href="logout.php">
+                  <span class="icon">
+                     <ion-icon name="log-out-outline"></ion-icon>
+                  </span>
+                  <span class="title">LOGOUT</span>
                </a>
             </li>
          </ul>
