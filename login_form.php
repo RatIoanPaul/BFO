@@ -66,14 +66,18 @@ if (isset($_POST['submit'])) {
       header('location:admin_page.php');
       exit();
    } else if (mysqli_num_rows($result_admin) <= 0) {
-      // Verifică apoi în tabelul de useri
       $select_user = "SELECT * FROM users WHERE email = '$email' AND password = '$pass'";
       $result_user = mysqli_query($conn, $select_user);
+      // Preia datele utilizatorului, inclusiv ID-ul
+      $user_data = mysqli_fetch_assoc($result_user);
+      $user_id = $user_data['id']; // presupunând că coloana pentru ID este 'id'
 
       // Generarea și trimiterea codului de autentificare în doi pași
       $two_step_code = rand(100000, 999999); // Cod simplu de 6 cifre
       $_SESSION['two_step_code'] = $two_step_code; // Stocarea codului în sesiune
       $_SESSION['email'] = $email;
+      $_SESSION['user_id'] = $user_id; // Stocarea ID-ului în sesiune
+
       // Trimiterea codului pe email
       send_verification_code($email, $two_step_code);
 

@@ -3,7 +3,7 @@ session_start();
 
 @include 'config.php';
 
-require 'C:\xampp\htdocs\BFO\vendor\autoload.php'; // Încarcă toate bibliotecile Composer
+require 'C:\xampp\htdocs\BFO\vendor\autoload.php';
 
 $host = "localhost";
 $user = "root";
@@ -15,6 +15,8 @@ $conn = new mysqli($host, $user, $password, $dbname);
 if ($conn->connect_error) {
     die("Conexiune eșuată: " . $conn->connect_error);
 }
+
+$errorMessage = ''; // Inițializează variabila pentru a evita 'Undefined variable'
 
 if (isset($_POST['update_volunteer'])) {
     $NumarContract = $conn->real_escape_string($_POST['NumarContract']);
@@ -54,23 +56,34 @@ if (isset($_POST['update_volunteer'])) {
         echo "Adresa de email nu este validă.";
     } else {
         // Construiește și execută interogarea SQL pentru inserarea datelor;
+        $stmtUser = $conn->prepare("UPDATE users SET email=? WHERE email=(SELECT Email FROM volunteer WHERE NumarContract=?)");
+        $stmtUser->bind_param("si", $Email, $NumarContract);
+        $stmtUser->execute();
+
         $stmt = $conn->prepare("UPDATE volunteer SET NumePrenume=?, Domiciliu=?, Cnp=?, SeriaCI=?, NumarCI=?, EliberatCI=?, EmitereCI=?, ExpirareCI=?, DataNastere=?, Telefon=?, Email=? WHERE NumarContract=?");
         $stmt->bind_param("sssssssssssi", $NumePrenume, $Domiciliu, $Cnp, $SeriaCI, $NumarCI, $EliberatCI, $EmitereCI, $ExpirareCI, $DataNastere, $Telefon, $Email, $NumarContract);
         $stmt->execute();
     }
 
-    if ($errorMessage == '') {
-        $stmt = $conn->prepare("UPDATE volunteer SET NumePrenume=?, Domiciliu=?, Cnp=?, SeriaCI=?, NumarCI=?, EliberatCI=?, EmitereCI=?, ExpirareCI=?, DataNastere=?, Telefon=?, Email=? WHERE NumarContract=?");
-        $stmt->bind_param("sssssssssssi", $NumePrenume, $Domiciliu, $Cnp, $SeriaCI, $NumarCI, $EliberatCI, $EmitereCI, $ExpirareCI, $DataNastere, $Telefon, $Email, $NumarContract);
+    if (empty($errorMessage)) {
+        $stmtVolunteer = $conn->prepare("UPDATE volunteer SET NumePrenume=?, Domiciliu=?, Cnp=?, SeriaCI=?, NumarCI=?, EliberatCI=?, EmitereCI=?, ExpirareCI=?, DataNastere=?, Telefon=?, Email=? WHERE NumarContract=?");
+        $stmtVolunteer->bind_param("sssssssssssi", $NumePrenume, $Domiciliu, $Cnp, $SeriaCI, $NumarCI, $EliberatCI, $EmitereCI, $ExpirareCI, $DataNastere, $Telefon, $Email, $NumarContract);
 
-        if ($stmt->execute()) {
-            $_SESSION['response'] = "Voluntarul a fost actualizat cu succes!";
-            $_SESSION['res_type'] = "success";
+        if ($stmtVolunteer->execute()) {
+
+            if ($stmtUser->execute()) {
+                $_SESSION['response'] = "Informațiile au fost actualizate cu succes în ambele tabele.";
+                $_SESSION['res_type'] = "success";
+            } else {
+                $_SESSION['response'] = "Eroare la actualizarea tabelului users: " . $stmtUser->error;
+                $_SESSION['res_type'] = "error";
+            }
+            $stmtUser->close();
         } else {
-            $_SESSION['response'] = "Eroare la actualizarea voluntarului: " . $stmt->error;
+            $_SESSION['response'] = "Eroare la actualizarea tabelului volunteer: " . $stmtVolunteer->error;
             $_SESSION['res_type'] = "error";
         }
-        $stmt->close();
+        $stmtVolunteer->close();
     } else {
         $_SESSION['response'] = $errorMessage;
         $_SESSION['res_type'] = "error";
